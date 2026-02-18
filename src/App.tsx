@@ -57,7 +57,7 @@ export default function App() {
   }, [])
 
   return (
-    <div style={{ background: "#0b0f19", minHeight: "100vh", color: "white" }}>
+    <div style={{ background: "#0b0f19", minHeight: "100vh", color: "white" }} className="h-screen w-screen bg-slate-900 text-white overflow-hidden">
       <InitiativeBoard encounter={encounter} />
     </div>
   )

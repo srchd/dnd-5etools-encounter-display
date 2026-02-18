@@ -12,32 +12,34 @@ export function CombatantCard({ combatant, isActive }: Props) {
   const isDead = combatant.currentHp <= 0
 
   return (
-    <div style={{
-      display: "flex",
-      gap: "12px",
-      padding: "12px",
-      background: isActive ? "#1f2937" : "#111",
-      border: isActive ? "2px solid gold" : "1px solid #333",
-      opacity: isDead ? 0.5 : 1
-    }}>
+    <div
+      className={`
+        relative flex flex-col flex-1 overflow-hidden rounded-2xl
+        ${isActive ? "bg-slate-800 border-2 border-yellow-400" : "bg-slate-900 border border-slate-700"}
+        ${isDead ? "opacity-50" : ""}
+      `}
+    >
+      {/* Top Section */}
+    <div className="p-3">
+      <div className="text-lg font-bold truncate">
+        {combatant.name}
+      </div>
+
+      <HpBar
+        current={combatant.currentHp}
+        max={combatant.maxHp}
+      />
+    </div>
+
+    {/* Image Section (fills remaining space) */}
+    <div className="flex-1 relative overflow-hidden">
       <img
         src={combatant.imageUrl}
         alt={combatant.name}
-        style={{
-          width: "80px",
-          height: "80px",
-          objectFit: "cover",
-          borderRadius: "8px"
-        }}
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover"
       />
-
-      <div style={{ flex: 1 }}>
-        <h3>{combatant.name}</h3>
-        <HpBar
-          current={combatant.currentHp}
-          max={combatant.maxHp}
-        />
-      </div>
     </div>
+  </div>
   )
 }
