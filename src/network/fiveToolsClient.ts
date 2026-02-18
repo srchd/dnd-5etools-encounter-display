@@ -4,8 +4,8 @@ import type { EncounterState, Combatant, CombatantType } from "../domain/encount
 type Listener = (state: EncounterState) => void
 
 export class FiveToolsClient {
-  private listeners: Listener[] = []
-  private playerCharacters: String[] = [
+  private _listeners: Listener[] = []
+  private _playerCharacters: String[] = [
     "Griffith",
     "Tarkas",
     "Liriel",
@@ -13,11 +13,11 @@ export class FiveToolsClient {
     "szisza",
     "raven"
   ]
-  private client: PeerVeClient
+  private _client: PeerVeClient
   // private encounterState: EncounterState
 
   constructor() {
-    this.client = new PeerVeClient();
+    this._client = new PeerVeClient();
     this._initUI();
   }
 
@@ -35,9 +35,9 @@ export class FiveToolsClient {
       }
 
       try {
-        await this.client.pConnectToServer(
+        await this._client.pConnectToServer(
           token,
-          (data) => this.updateEncounterData(data),
+          (data) => this._updateEncounterData(data),
           {
             label: "kaka",
             serialization: "json",
@@ -54,25 +54,12 @@ export class FiveToolsClient {
     });
   }
 
-  // connect() {
-  //   this.client.pConnectToServer(
-  //     this.token,
-  //     this.dataHandler,
-  //     {
-  //       label: "teszt",
-  //       serialization: "json",
-  //     }
-  //   )
-  //   .then((id: any) => console.log("Connected with id:", id))
-  //   .catch((err: any) => console.error("Connection failed:", err));
-  // }
-
-  updateEncounterData(data: any){
+  private _updateEncounterData(data: any){
     var combatants: Combatant[] = [];
     var round = data.data.payload.round;
 
     for (const [_i, _combatant] of data.data.payload.rows.entries()){
-      const combatantType: CombatantType = this.playerCharacters.includes(_combatant.name) ? "player" : "monster";
+      const combatantType: CombatantType = this._playerCharacters.includes(_combatant.name) ? "player" : "monster";
 
       combatants.push({
         id: String(_i),
@@ -81,7 +68,7 @@ export class FiveToolsClient {
         currentHp: _combatant.hpCurrent ?? 10,
         maxHp: _combatant.hpMax ?? 10,
         initiative: _combatant.initiative,
-        imageUrl: this.getImageAddress(_combatant.name, combatantType),
+        imageUrl: this._getImageAddress(_combatant.name, combatantType),
         conditions: [],
         isVisible: true,
         isActive: _combatant.isActive
@@ -97,52 +84,17 @@ export class FiveToolsClient {
     this.emit(state);
   }
 
-  private getImageAddress(name: string, type: CombatantType) {
+  private _getImageAddress(name: string, type: CombatantType) {
     if (type == "monster") return `https://5e.tools/img/bestiary/tokens/XMM/${name}.webp`
 
     return `/images/${name}.png`
   }
 
   onStateUpdate(listener: Listener) {
-    this.listeners.push(listener)
+    this._listeners.push(listener)
   }
 
   private emit(state: EncounterState) {
-    this.listeners.forEach(l => l(state))
+    this._listeners.forEach(l => l(state))
   }
-
-  /**
-   * THIS is where you map 5etools JSON → your schema.
-   * Inspect WS messages in DevTools and adjust accordingly.
-   */
-  // private adaptState(raw: any): EncounterState | null {
-  //   if (!raw) return null
-
-  //   // TODO: Adjust based on actual 5etools message structure
-  //   const combatants: Combatant[] = raw.combatants?.map((c: any) => ({
-  //     id: c.id,
-  //     name: c.name,
-  //     type: c.isPlayer ? "player" : "monster",
-  //     currentHp: c.hpCurrent,
-  //     maxHp: c.hpMax,
-  //     initiative: c.initiative,
-  //     imageUrl: this.resolveImage(c),
-  //     conditions: c.conditions ?? [],
-  //     isVisible: !c.isHidden
-  //   })) ?? []
-
-  //   return {
-  //     round: raw.round ?? 0,
-  //     currentTurnId: raw.activeCombatantId ?? null,
-  //     combatants
-  //   }
-  // }
-
-  // private resolveImage(c: any): string | undefined {
-  //   // Option 1: Use built-in image if exists
-  //   if (c.imageUrl) return c.imageUrl
-
-  //   // Option 2: Local mapping by name
-  //   return `/images/${c.name.toLowerCase().replace(/\s/g, "_")}.png`
-  // }
 }
