@@ -17,7 +17,7 @@ export function InitiativeBoard({ encounter }: Props) {
         <CombatantCard
           key={c.id}
           combatant={c}
-          isActive={c.id === encounter.currentTurnId}
+          isActive={c.isActive}
         />
       ))}
     </div>

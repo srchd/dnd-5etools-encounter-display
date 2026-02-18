@@ -10,6 +10,7 @@ export interface Combatant {
   imageUrl?: string
   conditions: string[]
   isVisible: boolean
+  isActive: boolean
 }
 
 export interface EncounterState {

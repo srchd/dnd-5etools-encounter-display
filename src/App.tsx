@@ -34,9 +34,9 @@
 
 // export default App
 import { useEffect, useState } from "react"
-// import type { EncounterState } from "./domain/encounter"
-// import { FiveToolsClient } from "./network/fiveToolsClient"
-// import { InitiativeBoard } from "./components/InitiativeBoard"
+import type { EncounterState } from "./domain/encounter"
+import { FiveToolsClient } from "./network/fiveToolsClient"
+import { InitiativeBoard } from "./components/InitiativeBoard"
 
 // TODO:
 //  - Show pictures (https://5e.tools/img/bestiary/tokens/XMM/<MONSTER_NAME>.webp)
@@ -48,91 +48,23 @@ import { useEffect, useState } from "react"
 declare const PeerVeClient: any;
 
 export default function App() {
-  // const [encounter, setEncounter] = useState<EncounterState>({
-  //   round: 0,
-  //   currentTurnId: null,
-  //   combatants: []
-  // })
-
-  const [rawData, setRawData] = useState<any>(null);
+  const [encounter, setEncounter] = useState<EncounterState>({
+    round: 0,
+    currentTurnId: null,
+    combatants: []
+  })
 
   useEffect(() => {
-    const token = "12bd592c-1701-440a-b3ac-df1bb55eaf93";
+    const token = "82be1f47-d98b-44f7-a667-11b13b26de50" // TODO: make configurable
+    const client = new FiveToolsClient(token)
 
-    const client = new PeerVeClient();
-
-    const dataHandler = (data: any) => {
-      console.log("Received data: ", data);
-      setRawData(data);
-    };
-
-    client.connect(token);
-
-    client.pConnectToServer(
-      token,
-      dataHandler,
-      {
-        label: "kukas",
-        serialization: "json",
-      }
-    )
-    .then((id: any) => console.log("Connected with id:", id))
-    .catch((err: any) => console.error("Connection failed:", err));
-
-    return () => client.disconnect?.();
-  }, []);
-
-  // useEffect(() => {
-  //   const token = "YOUR_SERVER_TOKEN" // TODO: make configurable
-  //   const client = new FiveToolsClient(token)
-
-  //   client.onStateUpdate(setEncounter)
-  //   client.connect()
-  // }, [])
-
-//   useEffect(() => {
-//   setEncounter({
-//     round: 1,
-//     currentTurnId: "1",
-//     combatants: [
-//       {
-//         id: "1",
-//         name: "Goblin",
-//         type: "monster",
-//         currentHp: 5,
-//         maxHp: 12,
-//         initiative: 14,
-//         imageUrl: "/images/goblin.png",
-//         conditions: [],
-//         isVisible: true
-//       },
-//       {
-//         id: "2",
-//         name: "Fighter",
-//         type: "player",
-//         currentHp: 22,
-//         maxHp: 30,
-//         initiative: 16,
-//         imageUrl: "/images/fighter.png",
-//         conditions: [],
-//         isVisible: true
-//       }
-//     ]
-//   })
-// }, [])
+    client.onStateUpdate(setEncounter)
+    client.connect()
+  }, [])
 
   return (
-    <div style={{ padding: 20, color: "white" }}>
-      <h1>Raw 5etools Data:</h1>
-      <pre>
-        {rawData ? JSON.stringify(rawData, null, 2) : "Waiting..."}
-      </pre>
+    <div style={{ background: "#0b0f19", minHeight: "100vh", color: "white" }}>
+      <InitiativeBoard encounter={encounter} />
     </div>
-  ); 
-
-  // return (
-  //   <div style={{ background: "#0b0f19", minHeight: "100vh", color: "white" }}>
-  //     <InitiativeBoard encounter={encounter} />
-  //   </div>
-  // )
+  )
 }
