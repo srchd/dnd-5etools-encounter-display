@@ -10,10 +10,15 @@ Using 5etools' sources, you will be able to have the page display information fo
 - Pictures for each combatant (PC and monsters)
 
 ## Installation Guide
-TODO
+### Windows
+1. Make sure [Docker Desktop](https://docs.docker.com/desktop/setup/install/windows-install/) is installed
+2. Make sure Docker Desktop is running.
+3. Start/double click on **start_docker.bat**
+4. Type in your browser: http://YOUR.LOCAL.IP.ADDRESS:8080
 
 ## How To Use
-TODO
+### Windows
+1. Start/double click on **start_docker.bat**
 
 ## Customization Options
 TODO
