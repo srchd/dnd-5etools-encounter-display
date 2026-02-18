@@ -13,36 +13,63 @@ export class FiveToolsClient {
     "szisza",
     "raven"
   ]
-  private token: string
   private client: PeerVeClient
   // private encounterState: EncounterState
-  private dataHandler = (data: any) => {
-    console.log("Received data: ", data);
-    this.updateEncounterData(data);
+
+  constructor() {
+    this.client = new PeerVeClient();
+    this._initUI();
   }
 
-  constructor(token: string) {
-    this.token = token
-    this.client = new PeerVeClient()
-  }
+  private _initUI() {
+    const btn = document.getElementById("connect-btn") as HTMLButtonElement;
+    const input = document.getElementById("token-input") as HTMLInputElement;
+    const errorMsg = document.getElementById("error-msg") as HTMLDivElement;
 
-  connect() {
-    this.client.pConnectToServer(
-      this.token,
-      this.dataHandler,
-      {
-        label: "teszt",
-        serialization: "json",
+    btn.addEventListener("click", async () => {
+      const token = input.value.trim();
+
+      if (!token) {
+        errorMsg.textContent = "Please enter a token.";
+        return;
       }
-    )
-    .then((id: any) => console.log("Connected with id:", id))
-    .catch((err: any) => console.error("Connection failed:", err));
+
+      try {
+        await this.client.pConnectToServer(
+          token,
+          (data) => this.updateEncounterData(data),
+          {
+            label: "kaka",
+            serialization: "json",
+          }
+        );
+
+        // Hide connect screen
+        document.getElementById("connect-screen")!.style.display = "none";
+        document.getElementById("root")!.style.display = "block";
+      } catch (e) {
+        errorMsg.textContent = "Connection failed. Invalid token?";
+        console.error(e);
+      }
+    });
   }
+
+  // connect() {
+  //   this.client.pConnectToServer(
+  //     this.token,
+  //     this.dataHandler,
+  //     {
+  //       label: "teszt",
+  //       serialization: "json",
+  //     }
+  //   )
+  //   .then((id: any) => console.log("Connected with id:", id))
+  //   .catch((err: any) => console.error("Connection failed:", err));
+  // }
 
   updateEncounterData(data: any){
     var combatants: Combatant[] = [];
     var round = data.data.payload.round;
-    var _id = 0;
 
     for (const [_i, _combatant] of data.data.payload.rows.entries()){
       const combatantType: CombatantType = this.playerCharacters.includes(_combatant.name) ? "player" : "monster";

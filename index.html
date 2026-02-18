@@ -9,7 +9,15 @@
     <script src="/libs/peerve-client.js"></script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="connect-screen">
+      <div class="connect-card">
+        <h2>Connect to Server</h2>
+        <input id="token-input" type="text" placeholder="Enter server token" />
+        <button id="connect-btn">Connect</button>
+        <div id="error-msg"></div>
+      </div>
+    </div>
+    <div id="root" style="display: none"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
