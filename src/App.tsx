@@ -40,7 +40,6 @@ import { InitiativeBoard } from "./components/InitiativeBoard"
 
 // TODO:
 //  - Show encounter correctly (prettier, landscape mode perhaps?)
-//  - Have an input field for the token
 
 declare const PeerVeClient: any;
 
