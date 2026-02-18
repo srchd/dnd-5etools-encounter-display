@@ -13,7 +13,11 @@ export function InitiativeBoard({ encounter }: Props) {
     <div style={{ padding: "24px" }} className="h-full w-full grid gap-4 p-4
          grid-cols-2 md:grid-cols-3 lg:grid-cols-4
          auto-rows-fr">
-      <h2>Round {encounter.round}</h2>
+      <div className="w-full flex justify-center items-center my-4">
+        <span className="text-4xl md:text-6xl font-bold text-yellow-400">
+          Round {encounter.round}
+        </span>
+      </div>
 
       {sorted.map(c => (
         <CombatantCard

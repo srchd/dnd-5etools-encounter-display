@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Player 1",
+        "imageUrl": "/images/player1.png"
+    },
+    {
+        "name": "PLayer 2",
+        "imageUrl": "/images/player2.png"
+    }
+]

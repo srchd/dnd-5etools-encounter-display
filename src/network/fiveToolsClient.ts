@@ -1,24 +1,20 @@
 import type { EncounterState, Combatant, CombatantType } from "../domain/encounter"
-// import type { PeerVeClient } from "../types/peerve-client"
+import playersData from "../assets/players.json"
+import type { Player } from "../types/player"
 
 type Listener = (state: EncounterState) => void
+const players: Player[] = playersData;
 
 export class FiveToolsClient {
   private _listeners: Listener[] = []
-  private _playerCharacters: String[] = [
-    "Griffith",
-    "Tarkas",
-    "Liriel",
-    "Lazari",
-    "szisza",
-    "raven"
-  ]
+  private _playerCharacters: String[] = []
+  private _playersData: { [key: string] : string} = {}
   private _client: PeerVeClient
-  // private encounterState: EncounterState
 
   constructor() {
     this._client = new PeerVeClient();
     this._initUI();
+    this._initPlayersData();
   }
 
   private _initUI() {
@@ -54,6 +50,13 @@ export class FiveToolsClient {
     });
   }
 
+  private _initPlayersData() {
+    for (const p of players.values()){
+      this._playerCharacters.push(p.name);
+      this._playersData[p.name] = p.imageUrl;
+    }
+  }
+
   private _updateEncounterData(data: any){
     var combatants: Combatant[] = [];
     var round = data.data.payload.round;
@@ -81,20 +84,20 @@ export class FiveToolsClient {
       combatants: combatants
     };
 
-    this.emit(state);
+    this._emit(state);
   }
 
   private _getImageAddress(name: string, type: CombatantType) {
     if (type == "monster") return `https://5e.tools/img/bestiary/tokens/XMM/${name}.webp`
 
-    return `/images/${name}.png`
+    if (type == "player") return this._playersData[name]
   }
 
   onStateUpdate(listener: Listener) {
     this._listeners.push(listener)
   }
 
-  private emit(state: EncounterState) {
+  private _emit(state: EncounterState) {
     this._listeners.forEach(l => l(state))
   }
 }

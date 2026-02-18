@@ -37,7 +37,7 @@ export function CombatantCard({ combatant, isActive }: Props) {
         src={combatant.imageUrl}
         alt={combatant.name}
         loading="lazy"
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-contain object-top rounded-xl"
       />
     </div>
   </div>
