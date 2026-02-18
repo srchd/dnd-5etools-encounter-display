@@ -38,9 +38,6 @@ import type { EncounterState } from "./domain/encounter"
 import { FiveToolsClient } from "./network/fiveToolsClient"
 import { InitiativeBoard } from "./components/InitiativeBoard"
 
-// TODO:
-//  - Show encounter correctly (prettier, landscape mode perhaps?)
-
 declare const PeerVeClient: any;
 
 export default function App() {
