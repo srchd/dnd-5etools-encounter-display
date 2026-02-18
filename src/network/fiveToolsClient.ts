@@ -1,9 +1,7 @@
 import type { EncounterState, Combatant, CombatantType } from "../domain/encounter"
-import playersData from "../assets/players.json"
 import type { Player } from "../types/player"
 
 type Listener = (state: EncounterState) => void
-const players: Player[] = playersData;
 
 export class FiveToolsClient {
   private _listeners: Listener[] = []
@@ -11,10 +9,10 @@ export class FiveToolsClient {
   private _playersData: { [key: string] : string} = {}
   private _client: PeerVeClient
 
-  constructor() {
+  constructor(playersJson: Player[]) {
     this._client = new PeerVeClient();
     this._initUI();
-    this._initPlayersData();
+    this._initPlayersData(playersJson);
   }
 
   private _initUI() {
@@ -50,8 +48,8 @@ export class FiveToolsClient {
     });
   }
 
-  private _initPlayersData() {
-    for (const p of players.values()){
+  private _initPlayersData(playersJson: Player[]) {
+    for (const p of playersJson.values()){
       this._playerCharacters.push(p.name);
       this._playersData[p.name] = p.imageUrl;
     }
