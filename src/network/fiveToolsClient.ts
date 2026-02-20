@@ -3,6 +3,8 @@ import type { Player } from "../types/player"
 
 type Listener = (state: EncounterState) => void
 
+const HP_WOUND_LEVEL_MAX = 3;
+
 export class FiveToolsClient {
   private _listeners: Listener[] = []
   private _playerCharacters: String[] = []
@@ -59,15 +61,24 @@ export class FiveToolsClient {
     var combatants: Combatant[] = [];
     var round = data.data.payload.round;
 
+    console.log(data);
+
     for (const [_i, _combatant] of data.data.payload.rows.entries()){
       const combatantType: CombatantType = this._playerCharacters.includes(_combatant.name) ? "player" : "monster";
+      const currentHpForVisibility = _combatant.hpCurrent ?? -1;
+      const isHpVisible = currentHpForVisibility == -1 ? false : true;  // currentHp could be 0, which would evaluate to false by default
+      // hpWoundLevel:
+      // 0: Healthy
+      // 1: Hurt (more than half hp)
+      // 2: Very Hurt (less than half)
+      // 3: Dead
 
       combatants.push({
         id: String(_i),
         name: _combatant.name,
         type: combatantType,
-        currentHp: _combatant.hpCurrent ?? 10,
-        maxHp: _combatant.hpMax ?? 10,
+        currentHp: isHpVisible ? _combatant.hpCurrent : HP_WOUND_LEVEL_MAX - _combatant.hpWoundLevel,
+        maxHp: isHpVisible ? _combatant.hpMax : HP_WOUND_LEVEL_MAX,
         initiative: _combatant.initiative,
         imageUrl: this._getImageAddress(_combatant.name, combatantType),
         conditions: [],

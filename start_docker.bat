@@ -1,1 +1,1 @@
-docker run -p 8080:80 dnd-display-encounter
+docker run -p 8080:80 dnd-encounter-display
