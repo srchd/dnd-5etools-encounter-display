@@ -57,8 +57,8 @@ if the settings is not changed. If needed to show the exat HP, turn on these set
 
 ## Troubleshooting/FAQ:
 1. Monsters are not showing:
-  - Make sure that the "eye" icon is not crossed out in the DM Screen.
+   - Make sure that the "eye" icon is not crossed out in the DM Screen.
 2. Website does not load:
-  - If the web page will be displayed on a different machine, than the docker is running on, you need to use **start_docker.bat**. After that, make sure that you are trying to connect to your **LOCAL IPv4** address. You can check it by running **ipconfig** on Windows. You will see a bunch of stuff, but you need the one that *usually* starts with **192.168**
+   - If the web page will be displayed on a different machine, than the docker is running on, you need to use **start_docker.bat**. After that, make sure that you are trying to connect to your **LOCAL IPv4** address. You can check it by running **ipconfig** on Windows. You will see a bunch of stuff, but you need the one that *usually* starts with **192.168**
 
 If you face a problem which is not detailed here, raise an issue.
