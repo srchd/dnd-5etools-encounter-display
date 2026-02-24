@@ -8,4 +8,5 @@ export default defineConfig({
     react(),
     tailwindcsss(),
   ],
+  base:'/dnd-5etools-encounter-display/'
 })
